@@ -1,0 +1,21 @@
+name: CI - Construir imagen Docker
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el codigo
+        uses: actions/checkout@v4
+
+      - name: Construir la imagen Docker
+        run: docker build -t proyecto-cloud .
+
+      - name: Probar el contenedor
+        run: |
+          docker run -d -p 8080:80 --name web proyecto-cloud
+          sleep 5
+          curl -f http://localhost:8080
